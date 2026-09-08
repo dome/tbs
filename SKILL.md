@@ -27,22 +27,44 @@ A full worked example (Tempo blockchain, 3 repos, 40+ crates) is in [`example/te
 
 ## Outputs
 
-Exactly these 11 files (numbered, fixed order):
+**11 numbered slots** (fixed order, names domain-adaptive):
+
+The slot numbers and their *function* are fixed; the file names adapt to the domain. The example below shows the Tempo blockchain output — for an accounting system, see "Adapting the domains" below.
 
 ```
 docs/technical-baseline/
 ├── INDEX.md                    ← master index + repo layout + tech stack
-├── 01-EXECUTIVE-SUMMARY.md     ← what it is, value proposition, system overview diagram
+├── 01-EXECUTIVE-SUMMARY.md     ← what it is, value proposition, system overview
 ├── 02-ARCHITECTURE.md          ← component/crate/module map, dependency graph, data flow
-├── 03-CONSENSUS.md             ← core mechanism (rename to fit domain, see "Adapting the domains")
-├── 04-EVM-PRECOMPILES.md       ← domain-specific contracts/plugins/extensions
-├── 05-FEE-GAS-SYSTEM.md        ← domain economics / resource / pricing model
-├── 06-ZONES.md                 ← secondary layer / satellite systems
+├── 03-<CORE-MECHANISM>.md      ← the core algorithm/protocol that makes the system correct
+├── 04-<EXTENSION-LAYER>.md     ← plugins/hooks/contracts/extensions
+├── 05-<ECONOMICS>.md           ← pricing/billing/resource/quota model
+├── 06-<SECONDARY-SYSTEMS>.md   ← satellite components/child layers/bridges
 ├── 07-DEPLOYMENT.md            ← topology, ports, Docker/IaC, CI/CD, environments
-├── 08-GENESIS.md               ← initialization/bootstrapping & configuration reference
+├── 08-<INITIALIZATION>.md      ← bootstrap/genesis/migration & configuration reference
 ├── 09-DEVELOPER-REFERENCE.md   ← APIs, CLI flags, task-runner recipes, CI workflows
 └── 10-GLOSSARY.md              ← terminology, standards index, address/endpoint maps
 ```
+
+**Tempo blockchain example** (what you'll find in `example/tempo/`):
+
+| Slot | File | Function |
+|------|------|----------|
+| 03 | `03-CONSENSUS.md` | Simplex BFT consensus, P2P, epochs, DKG |
+| 04 | `04-EVM-PRECOMPILES.md` | 16+ protocol-level precompiles |
+| 05 | `05-FEE-GAS-SYSTEM.md` | Stablecoin-denominated gas, Fee AMM |
+| 06 | `06-ZONES.md` | L2 privacy rollups |
+| 08 | `08-GENESIS.md` | Chain initialization & hardfork schedule |
+
+**Accounting system example** (how the same slots adapt):
+
+| Slot | File | Function |
+|------|------|----------|
+| 03 | `03-POSTING-ENGINE.md` | Double-entry validation, transaction posting rules |
+| 04 | `04-ACCOUNT-TYPES.md` | Chart of accounts, account hierarchies, custom account types |
+| 05 | `05-BILLING-PRICING.md` | Invoice generation, tax calculation, payment terms |
+| 06 | `06-REPORTING-SUBSYSTEMS.md` | Financial statements, audit trails, compliance exports |
+| 08 | `08-FISCAL-CONFIG.md` | Fiscal year setup, currency configuration, opening balances |
 
 ---
 
@@ -135,15 +157,15 @@ Before delivering:
 
 ## Adapting the domains
 
-The tempo example is a blockchain; your target may not be. Keep the **11-file skeleton**, rename to fit, keep the *function* of each slot:
+The tempo example is a blockchain; your target may not be. Keep the **11-slot skeleton**, rename to fit, keep the *function* of each slot:
 
-| Slot | Blockchain example | Web app | ML pipeline | Embedded firmware |
-|------|-------------------|---------|-------------|-------------------|
-| 03 core mechanism | Consensus & Networking | Request lifecycle & middleware | Training orchestration | RTOS task scheduler |
-| 04 extensions | EVM & Precompiles | Plugin/event system | Model registry | Driver/HAL layer |
-| 05 economics | Fee & Gas System | Billing/quotas | Compute cost model | Power/memory budget |
-| 06 secondary | Zones (L2) | Worker services | Inference serving | Companion mobile app |
-| 08 initialization | Genesis & Configuration | DB migrations & seeding | Dataset prep | Provisioning/flashing |
+| Slot | Blockchain example | Web app | ML pipeline | Accounting system | Embedded firmware |
+|------|-------------------|---------|-------------|-------------------|-------------------|
+| 03 core mechanism | Consensus & Networking | Request lifecycle & middleware | Training orchestration | Posting engine & double-entry rules | RTOS task scheduler |
+| 04 extensions | EVM & Precompiles | Plugin/event system | Model registry | Chart of accounts & custom account types | Driver/HAL layer |
+| 05 economics | Fee & Gas System | Billing/quotas | Compute cost model | Invoicing, tax, payment terms | Power/memory budget |
+| 06 secondary | Zones (L2) | Worker services | Inference serving | Reporting subsystems, audit exports | Companion mobile app |
+| 08 initialization | Genesis & Configuration | DB migrations & seeding | Dataset prep | Fiscal year setup, opening balances | Provisioning/flashing |
 
 If the system genuinely has no counterpart (e.g., no secondary layer), still create the file with an honest scope note — do not renumber; downstream consumers index by number.
 
